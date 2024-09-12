@@ -1,0 +1,13 @@
+@use "../../styles/shared";
+
+.root {
+  display: flex;
+  flex-direction: column;
+  background-color: shared.$color-bg;
+}
+
+.main {
+  min-height: 90vh;
+  color: shared.$color-secondary-white;
+  padding: 1rem;
+}
