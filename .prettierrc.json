@@ -1,10 +1,14 @@
 {
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
   "singleQuote": true,
+  "trailingComma": "all",
   "bracketSpacing": true,
-  "arrowParens": "always",
-  "printWidth": 120,
   "jsxBracketSameLine": false,
-  "singleAttributePerLine": true,
+  "arrowParens": "always",
+  "singleAttributePerLine": false,
   "overrides": [
     {
       "files": "*.scss",
@@ -13,5 +17,15 @@
       }
     }
   ],
-  "quoteProps": "preserve"
+  "quoteProps": "preserve",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "<BUILTIN_MODULES>",
+    "",
+    "react(.*)$",
+    "",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^[./]"
+  ]
 }
