@@ -1,53 +1,59 @@
-import { Action, Reducer } from 'redux';
+import { getNowPlaying } from '../API/api';
+import { ActionWithPayload, createReducer } from '../redux/utils';
+import { AppThunk } from '../store';
 
 export interface Movie {
+  backdrop_path: string;
   id: number;
   title: string;
+  overview: string;
   popularity: number;
-  overviews: string;
+  release_date: string;
+  poster_path: string;
 }
 
 interface MovieState {
   top: Movie[];
+  loading: boolean;
 }
 
 const initialState: MovieState = {
-  top: [
-    {
-      id: 1,
-      title: 'The Shawshank Redemption',
-      popularity: 98,
-      overviews: 'Redemption...',
-    },
-    {
-      id: 2,
-      title: 'The Godfather',
-      popularity: 97,
-      overviews: 'Godfather...',
-    },
-    {
-      id: 3,
-      title: 'The Dark Knight',
-      popularity: 96.5,
-      overviews: 'Batman...',
-    },
-    {
-      id: 4,
-      title: 'The Godfather Part II',
-      popularity: 96,
-      overviews: 'Part two...',
-    },
-    {
-      id: 5,
-      title: 'Angry men',
-      popularity: 96,
-      overviews: 'Men...',
-    },
-  ],
+  top: [],
+  loading: false,
 };
 
-const moviesReducer: Reducer<MovieState, Action> = () => {
-  return initialState;
+const moviesLoaded = (movies: Movie[]) => ({
+  type: 'movies/loaded',
+  payload: movies,
+});
+
+const moviesLoading = () => ({
+  type: 'movies/loading',
+});
+
+export const fetchMovies = (): AppThunk<Promise<void>> => {
+  return async (dispatch) => {
+    dispatch(moviesLoading());
+    const { results } = await getNowPlaying();
+
+    dispatch(moviesLoaded(results));
+  };
 };
+
+const moviesReducer = createReducer<MovieState>(initialState, {
+  'movies/loaded': (state, action: ActionWithPayload<Movie[]>) => {
+    return {
+      ...state,
+      top: action.payload,
+      loading: false,
+    };
+  },
+  'movies/loading': (state) => {
+    return {
+      ...state,
+      loading: true,
+    };
+  },
+});
 
 export default moviesReducer;
