@@ -28,12 +28,15 @@ const HeaderLink: FC<HeaderLinkProps> = ({ children, to }) => {
 
 export const Header = () => {
   return (
-    <AppBar>
+    <AppBar position="fixed" sx={{ backgroundColor: '#22435e' }}>
       <Toolbar>
-        <RouterLink to={'/'} className={styles.link}>
+        <RouterLink
+          to={'/'}
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
           <LiveTvOutlined sx={{ mr: 2 }} />
         </RouterLink>
-        <Typography variant="h6" color="inherit" noWrap>
+        <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
           Movieverse
         </Typography>
         <nav>

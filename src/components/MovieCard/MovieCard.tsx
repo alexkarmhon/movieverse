@@ -30,8 +30,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         overflow: 'hidden',
         transition: '0.3s ease-in-out',
         '&:hover': {
-          transform: 'scale(1.005)',
-          boxShadow: '0 12px 20px rgba(0,0,0,0.5)',
+          transform: 'scale(1.03)',
+          boxShadow: '0 12px 20px rgba(255, 193, 7, 0.6)',
         },
       }}
     >
@@ -42,59 +42,54 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
             : '/movie-thumb.png'
         }
-        sx={{ width: '100%', height: 'auto' }}
+        sx={{
+          width: '100%',
+          height: 'auto',
+          transition: 'transform 0.3s',
+          '&:hover': {
+            transform: 'scale(1.05)',
+          },
+        }}
       />
       <CardContent
         sx={{
           flexGrow: 1,
-          padding: '16px',
-          backgroundColor: '#f5f5f5',
+          p: 2,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
+          backgroundColor: '#252525',
         }}
       >
         <Box>
-          <Typography
-            variant="h5"
-            gutterBottom
-            sx={{ fontWeight: 'bold', color: '#333' }}
-          >
+          <Typography variant="h5" gutterBottom>
             {movie.title}
           </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ mt: 1, mb: 2 }}
-          >
+          <Typography variant="body2" color="text.secondary">
             {movie.overview}
           </Typography>
         </Box>
-        <Box sx={{ mt: 2 }}>
-          <Typography
-            variant="button"
-            display={'block'}
-            mt={2}
-            sx={{ fontSize: '0.875rem', color: '#777' }}
-          >
-            Popularity: {movie.popularity}
-          </Typography>
-        </Box>
+        <Typography
+          variant="button"
+          sx={{ fontSize: '0.875rem', color: '#ccc', mt: 2 }}
+        >
+          Popularity: {movie.popularity}
+        </Typography>
       </CardContent>
       <CardActions
-        sx={{
-          justifyContent: 'flex-end',
-          padding: '8px 16px',
-          backgroundColor: '#e0e0e0',
-        }}
+        sx={{ justifyContent: 'flex-end', p: 2, backgroundColor: '#333' }}
       >
         <Button
           component={RouterLink}
           to={`${movie.id}`}
-          color="primary"
+          color="secondary"
           sx={{
             textTransform: 'none',
             fontWeight: 'bold',
+            '&:hover': {
+              backgroundColor: '#fbc02d',
+              color: '#333',
+            },
           }}
         >
           Details

@@ -3,25 +3,36 @@ import React, { useEffect } from 'react';
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
 import { useAppDispatch } from '../../hooks';
-import { fetchMovies, Movie } from '../../reducers/movies';
+import { fetchMoviesTop, fetchUpcoming, Movie } from '../../reducers/movies';
 import { MovieCard } from '../MovieCard/MovieCard';
 
 export interface MoviesProps {
   movies: Movie[];
   loading: boolean;
+  moviesTitle: string;
 }
 
-export const Movies: React.FC<MoviesProps> = ({ movies, loading }) => {
+export const Movies: React.FC<MoviesProps> = ({
+  movies,
+  loading,
+  moviesTitle,
+}) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchMovies());
+    dispatch(fetchMoviesTop());
+    dispatch(fetchUpcoming());
   }, [dispatch]);
 
   return (
-    <Container sx={{ py: 8 }} maxWidth="lg">
-      <Typography variant="h4" align="center" gutterBottom>
-        Now playing
+    <Container sx={{ py: 2 }} maxWidth="lg">
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ color: '#fbc02d' }}
+      >
+        {moviesTitle}
       </Typography>
       {loading && <LinearProgress color="secondary" />}
       <Grid container spacing={4}>

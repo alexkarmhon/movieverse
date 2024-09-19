@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
 
+import { Container } from '@mui/material';
+
 import Movies from '../components/Movies/Movies';
 import { Movie } from '../reducers/movies';
 import { RootState } from '../store';
@@ -11,9 +13,9 @@ interface MoviesPageProps {
 
 function MoviesPage({ movies, loading }: MoviesPageProps) {
   return (
-    <>
-      <Movies movies={movies} loading={loading} />
-    </>
+    <Container sx={{ py: 6 }}>
+      <Movies movies={movies} loading={loading} moviesTitle={'Now playing'} />
+    </Container>
   );
 }
 const mapStateToProps = (state: RootState) => ({
