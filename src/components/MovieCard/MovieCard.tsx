@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import {
   Box,
   Button,
@@ -8,6 +9,8 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  IconButton,
+  Tooltip,
   Typography,
 } from '@mui/material';
 
@@ -15,9 +18,13 @@ import { Movie } from '../../reducers/movies';
 
 export interface MovieCardProps {
   movie: Movie;
+  enableUserActions?: boolean;
 }
 
-export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+export const MovieCard: React.FC<MovieCardProps> = ({
+  movie,
+  enableUserActions,
+}) => {
   return (
     <Card
       sx={{
@@ -92,8 +99,21 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             },
           }}
         >
-          Details
+          DETAILS
         </Button>
+        {enableUserActions && (
+          <Tooltip title="Add to favorites">
+            <IconButton>
+              <FavoriteIcon
+                sx={{
+                  '&:hover': {
+                    color: '#fbc12d95',
+                  },
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+        )}
       </CardActions>
     </Card>
   );

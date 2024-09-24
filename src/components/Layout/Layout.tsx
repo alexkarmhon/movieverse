@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 
+import { anonymousUser, AuthContext, AuthInfo } from '../../AuthContext';
 import { Header } from '../Header/Header';
 import styles from './Layout.module.scss';
 
@@ -35,14 +37,24 @@ const defaultTheme = createTheme({
   },
 });
 
+const fakeAuth: AuthInfo = {
+  user: { name: 'Alex' },
+};
+
 export const Layout = () => {
+  const [auth, setAuth] = useState<AuthInfo>({ user: anonymousUser });
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Header />
-      <main className={styles.main}>
-        <Outlet />
-      </main>
+      <AuthContext.Provider value={auth}>
+        <Header
+          onLogout={() => setAuth({ user: anonymousUser })}
+          onLogin={() => setAuth(fakeAuth)}
+        />
+        <main className={styles.main}>
+          <Outlet />
+        </main>
+      </AuthContext.Provider>
     </ThemeProvider>
   );
 };

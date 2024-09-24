@@ -12,13 +12,13 @@ export interface Movie {
   poster_path: string;
 }
 
-interface MovieState {
+interface MoviesState {
   top: Movie[];
   upcoming: Movie[];
   loading: boolean;
 }
 
-const initialState: MovieState = {
+const initialState: MoviesState = {
   top: [],
   upcoming: [],
   loading: false,
@@ -54,7 +54,7 @@ export const fetchUpcoming = (): AppThunk<Promise<void>> => {
   };
 };
 
-const moviesReducer = createReducer<MovieState>(initialState, {
+const moviesReducer = createReducer<MoviesState>(initialState, {
   'moviesTop/loaded': (state, action: ActionWithPayload<Movie[]>) => {
     return {
       ...state,

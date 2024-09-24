@@ -1,14 +1,26 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import LiveTvOutlined from '@mui/icons-material/LiveTvOutlined';
-import { AppBar, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Link, Toolbar, Typography } from '@mui/material';
 
+import { anonymousUser, AuthContext } from '../../AuthContext';
 import styles from './Header.module.scss';
+
+interface HeaderProps {
+  onLogout: () => void;
+  onLogin: () => void;
+}
 
 interface HeaderLinkProps {
   children: React.ReactNode;
   to: string;
+}
+
+interface AuthSectionProps {
+  condition: boolean;
+  onLogout: () => void;
+  onLogin: () => void;
 }
 
 const HeaderLink: FC<HeaderLinkProps> = ({ children, to }) => {
@@ -26,7 +38,29 @@ const HeaderLink: FC<HeaderLinkProps> = ({ children, to }) => {
   );
 };
 
-export const Header = () => {
+const AuthSection: FC<AuthSectionProps> = ({
+  condition,
+  onLogout,
+  onLogin,
+}) => {
+  if (condition) {
+    return (
+      <Button color="inherit" variant="outlined" onClick={onLogout}>
+        Log out
+      </Button>
+    );
+  }
+  return (
+    <Button color="inherit" variant="outlined" onClick={onLogin}>
+      Log in
+    </Button>
+  );
+};
+
+export const Header: FC<HeaderProps> = ({ onLogout, onLogin }) => {
+  const { user } = useContext(AuthContext);
+  const isLoggedIn = user !== anonymousUser;
+
   return (
     <AppBar position="fixed" sx={{ backgroundColor: '#22435e' }}>
       <Toolbar>
@@ -39,11 +73,20 @@ export const Header = () => {
         <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
           Movieverse
         </Typography>
-        <nav>
-          <HeaderLink to="/">Home</HeaderLink>
-          <HeaderLink to="/movies">Movies</HeaderLink>
-          <HeaderLink to="/about">About</HeaderLink>
-        </nav>
+        <Box flexGrow={1}>
+          {isLoggedIn && (
+            <nav>
+              <HeaderLink to="/">Home</HeaderLink>
+              <HeaderLink to="/movies">Movies</HeaderLink>
+              <HeaderLink to="/about">About</HeaderLink>
+            </nav>
+          )}
+        </Box>
+        <AuthSection
+          condition={isLoggedIn}
+          onLogout={onLogout}
+          onLogin={onLogin}
+        />
       </Toolbar>
     </AppBar>
   );

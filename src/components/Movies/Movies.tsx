@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
+import { anonymousUser, AuthContext } from '../../AuthContext';
 import { useAppDispatch } from '../../hooks';
 import { fetchMoviesTop, fetchUpcoming, Movie } from '../../reducers/movies';
 import { MovieCard } from '../MovieCard/MovieCard';
@@ -18,6 +19,9 @@ export const Movies: React.FC<MoviesProps> = ({
   moviesTitle,
 }) => {
   const dispatch = useAppDispatch();
+
+  const { user } = useContext(AuthContext);
+  const isLoggedIn = user !== anonymousUser;
 
   useEffect(() => {
     dispatch(fetchMoviesTop());
@@ -38,7 +42,11 @@ export const Movies: React.FC<MoviesProps> = ({
       <Grid container spacing={4}>
         {movies.map((movie) => (
           <Grid item key={movie.id} xs={12} sm={6} md={4}>
-            <MovieCard movie={movie} key={movie.id} />
+            <MovieCard
+              movie={movie}
+              key={movie.id}
+              enableUserActions={isLoggedIn}
+            />
           </Grid>
         ))}
       </Grid>
