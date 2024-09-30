@@ -65,11 +65,11 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          backgroundColor: '#252525',
+          backgroundColor: '#cfcfcf',
         }}
       >
         <Box>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" gutterBottom color="text.primary">
             {movie.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">

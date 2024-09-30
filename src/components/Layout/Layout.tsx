@@ -16,12 +16,12 @@ const defaultTheme = createTheme({
       main: '#fbc02d', // Яскраво-жовтий
     },
     background: {
-      default: '#121212', // Темний фон
-      paper: '#1e1e1e', // Темно-сірі елементи
+      default: '#fcfcfc', // Темний фон
+      paper: '#fcfcfc', // Темно-сірі елементи
     },
     text: {
-      primary: '#ffffff', // Білий текст
-      secondary: '#b0bec5', // Світло-сірий текст
+      primary: '#3a3a3a', // Білий текст
+      secondary: '#474747', // Світло-сірий текст
     },
   },
   typography: {

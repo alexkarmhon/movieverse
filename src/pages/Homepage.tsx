@@ -5,16 +5,17 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Container, Typography } from '@mui/material';
 
 import { anonymousUser, AuthContext } from '../AuthContext';
-import Movies from '../components/Movies/Movies';
-import { Movie } from '../reducers/movies';
+// import Movies from '../components/Movies/Movies';
+// import { fetchUpcoming, Movie } from '../reducers/movies';
 import { RootState } from '../store';
 
-interface HomepageProps {
-  movies: Movie[];
-  loading: boolean;
-}
+// interface HomepageProps {
+//   movies: Movie[];
+//   loading: boolean;
+// }
 
-function Homepage({ movies, loading }: HomepageProps) {
+// function Homepage({ movies, loading }: HomepageProps) {
+function Homepage() {
   const { user } = useContext(AuthContext);
   const isLoggedIn = user !== anonymousUser;
 
@@ -62,11 +63,12 @@ function Homepage({ movies, loading }: HomepageProps) {
       </Box>
 
       {/* Latest Movies Section */}
-      <Movies
+      {/* <Movies
         movies={movies}
         loading={loading}
         moviesTitle={'Latest Releases'}
-      />
+        fetchCallback={fetchUpcoming}
+      /> */}
     </Container>
   );
 }

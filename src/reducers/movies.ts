@@ -12,21 +12,37 @@ export interface Movie {
   poster_path: string;
 }
 
-interface MoviesState {
+export interface MoviesState {
   top: Movie[];
+  topPage: number;
+  hasMoreTopPages: boolean;
   upcoming: Movie[];
+  upcomingPage: number;
   loading: boolean;
+}
+
+interface MoviesTopPayload {
+  movies: Movie[];
+  page: number;
+  hasMorePages: boolean;
 }
 
 const initialState: MoviesState = {
   top: [],
+  topPage: 0,
+  hasMoreTopPages: true,
   upcoming: [],
+  upcomingPage: 0,
   loading: false,
 };
 
-const moviesTopLoaded = (movies: Movie[]) => ({
+const moviesTopLoaded = (
+  movies: Movie[],
+  page: number,
+  hasMorePages: boolean,
+) => ({
   type: 'moviesTop/loaded',
-  payload: movies,
+  payload: { movies, page, hasMorePages },
 });
 
 const moviesUpcomingLoaded = (movies: Movie[]) => ({
@@ -38,11 +54,22 @@ const moviesLoading = () => ({
   type: 'movies/loading',
 });
 
-export const fetchMoviesTop = (): AppThunk<Promise<void>> => {
-  return async (dispatch) => {
+// export const fetchMoviesTop = (): AppThunk<Promise<void>> => {
+//   return async (dispatch) => {
+//     dispatch(moviesLoading());
+//     const response = await getNowPlaying(1);
+//     console.log(response);
+//     dispatch(moviesTopLoaded(response.results, response.page));
+//   };
+// };
+
+export const fetchMoviesTopNext = (): AppThunk<Promise<void>> => {
+  return async (dispatch, getState) => {
+    const nextPage = getState().movies.topPage + 1;
     dispatch(moviesLoading());
-    const { results } = await getNowPlaying();
-    dispatch(moviesTopLoaded(results));
+    const { results, page, total_pages } = await getNowPlaying(nextPage);
+    const hasMorePages = page < total_pages;
+    dispatch(moviesTopLoaded(results, page, hasMorePages));
   };
 };
 
@@ -55,10 +82,12 @@ export const fetchUpcoming = (): AppThunk<Promise<void>> => {
 };
 
 const moviesReducer = createReducer<MoviesState>(initialState, {
-  'moviesTop/loaded': (state, action: ActionWithPayload<Movie[]>) => {
+  'moviesTop/loaded': (state, action: ActionWithPayload<MoviesTopPayload>) => {
     return {
       ...state,
-      top: action.payload,
+      top: [...state.top, ...action.payload.movies],
+      topPage: action.payload.page,
+      hasMoreTopPages: action.payload.hasMorePages,
       loading: false,
     };
   },
