@@ -71,7 +71,7 @@ export const Header: FC<HeaderProps> = ({ onLogout, onLogin }) => {
           <LiveTvOutlined sx={{ mr: 2 }} />
         </RouterLink>
         <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-          Movieverse
+          MovieverseTMDB
         </Typography>
         <Box flexGrow={1}>
           {isLoggedIn && (

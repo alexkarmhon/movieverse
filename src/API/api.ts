@@ -31,6 +31,12 @@ interface UpcomingResponse {
   total_pages: number;
   total_results: number;
 }
+interface MoviesResponse {
+  results: MovieDetails[];
+  page: number;
+  total_pages: number;
+  total_results: number;
+}
 
 export interface KeywordItem {
   id: number;
@@ -44,11 +50,48 @@ interface KeywordsResponse {
   total_results: number;
 }
 
+export interface MoviesFilters {
+  keywords?: number[];
+  genres?: number[];
+}
+
 export const getNowPlaying = async (
   page: number,
 ): Promise<NowPlayingResponse> => {
   const response = await fetch(
     `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${page}`,
+    getOptions,
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch now playing movies: ${response.statusText}`,
+    );
+  }
+
+  return response.json();
+};
+
+export const getMovies = async (
+  page: number,
+  filters: MoviesFilters,
+): Promise<MoviesResponse> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+  });
+
+  if (filters.keywords?.length) {
+    params.append('with_keywords', filters.keywords.join('|'));
+  }
+
+  if (filters.genres?.length) {
+    params.append('with_genres', filters.genres.join(','));
+  }
+
+  const query = params.toString();
+
+  const response = await fetch(
+    `https://api.themoviedb.org/3/discover/movie?${query}`,
     getOptions,
   );
 

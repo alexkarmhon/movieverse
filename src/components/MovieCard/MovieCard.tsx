@@ -46,7 +46,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         component={'img'}
         image={
           movie.poster_path
-            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+            ? `https://image.tmdb.org/t/p/original/${movie.poster_path}`
             : '/movie-thumb.png'
         }
         sx={{
@@ -69,16 +69,26 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         }}
       >
         <Box>
-          <Typography variant="h5" gutterBottom color="text.primary">
+          <Typography variant="h6" gutterBottom color="text.primary">
             {movie.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {movie.overview}
           </Typography>
         </Box>
         <Typography
           variant="button"
-          sx={{ fontSize: '0.875rem', color: '#ccc', mt: 2 }}
+          sx={{ fontSize: '0.875rem', color: '#2c2c2c', mt: 1 }}
         >
           Popularity: {movie.popularity}
         </Typography>

@@ -1,4 +1,10 @@
-import { getNowPlaying, getUpcoming } from '../API/api';
+import {
+  getMovies,
+  getNowPlaying,
+  getUpcoming,
+  MoviesFilters,
+} from '../API/api';
+import { genres } from '../genres';
 import { ActionWithPayload, createReducer } from '../redux/utils';
 import { AppThunk } from '../store';
 
@@ -12,10 +18,16 @@ export interface Movie {
   poster_path: string;
 }
 
+export interface Genre {
+  id: number;
+  name: string;
+}
+
 export interface MoviesState {
   top: Movie[];
   topPage: number;
   hasMoreTopPages: boolean;
+  genres: Genre[];
   upcoming: Movie[];
   upcomingPage: number;
   loading: boolean;
@@ -34,6 +46,7 @@ const initialState: MoviesState = {
   upcoming: [],
   upcomingPage: 0,
   loading: false,
+  genres,
 };
 
 const moviesTopLoaded = (
@@ -42,6 +55,15 @@ const moviesTopLoaded = (
   hasMorePages: boolean,
 ) => ({
   type: 'moviesTop/loaded',
+  payload: { movies, page, hasMorePages },
+});
+
+const moviesLoaded = (
+  movies: Movie[],
+  page: number,
+  hasMorePages: boolean,
+) => ({
+  type: 'movies/loaded',
   payload: { movies, page, hasMorePages },
 });
 
@@ -54,14 +76,23 @@ const moviesLoading = () => ({
   type: 'movies/loading',
 });
 
-// export const fetchMoviesTop = (): AppThunk<Promise<void>> => {
-//   return async (dispatch) => {
-//     dispatch(moviesLoading());
-//     const response = await getNowPlaying(1);
-//     console.log(response);
-//     dispatch(moviesTopLoaded(response.results, response.page));
-//   };
-// };
+export const resetMovies = () => ({
+  type: 'movies/reset',
+});
+
+export const fetchNextPage = (
+  filters: MoviesFilters = {},
+): AppThunk<Promise<void>> => {
+  return async (dispatch, getState) => {
+    const nextPage = getState().movies.topPage + 1;
+    dispatch(moviesLoading());
+    const moviesResponse = await getMovies(nextPage, filters);
+    const hasMorePages = moviesResponse.page < moviesResponse.total_pages;
+    dispatch(
+      moviesLoaded(moviesResponse.results, moviesResponse.page, hasMorePages),
+    );
+  };
+};
 
 export const fetchMoviesTopNext = (): AppThunk<Promise<void>> => {
   return async (dispatch, getState) => {
@@ -82,6 +113,15 @@ export const fetchUpcoming = (): AppThunk<Promise<void>> => {
 };
 
 const moviesReducer = createReducer<MoviesState>(initialState, {
+  'movies/loaded': (state, action: ActionWithPayload<MoviesTopPayload>) => {
+    return {
+      ...state,
+      top: [...state.top, ...action.payload.movies],
+      topPage: action.payload.page,
+      hasMoreTopPages: action.payload.hasMorePages,
+      loading: false,
+    };
+  },
   'moviesTop/loaded': (state, action: ActionWithPayload<MoviesTopPayload>) => {
     return {
       ...state,
@@ -103,6 +143,9 @@ const moviesReducer = createReducer<MoviesState>(initialState, {
       ...state,
       loading: true,
     };
+  },
+  'movies/reset': () => {
+    return { ...initialState };
   },
 });
 

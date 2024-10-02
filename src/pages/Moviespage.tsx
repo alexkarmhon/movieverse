@@ -14,7 +14,7 @@ interface MoviesPageProps {
 function MoviesPage({ movies, loading }: MoviesPageProps) {
   return (
     <Container sx={{ py: 6 }}>
-      <Movies movies={movies} loading={loading} moviesTitle={'Now playing'} />
+      <Movies movies={movies} loading={loading} />
     </Container>
   );
 }
