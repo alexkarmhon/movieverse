@@ -41,19 +41,20 @@ export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
     },
   });
 
-  const fetchKeywords = useMemo(
-    () =>
-      debounce(async (query: string) => {
-        if (!query) {
-          setKeywordsOptions([]);
-        }
+  const fetchKeywordsOptions = async (query: string) => {
+    if (!query) {
+      setKeywordsOptions([]);
+    }
 
-        setKeywordsLoading(true);
+    setKeywordsLoading(true);
 
-        const { results } = await getKeywords(query);
-        setKeywordsLoading(false);
-        setKeywordsOptions(results);
-      }, 1000),
+    const { results } = await getKeywords(query);
+    setKeywordsLoading(false);
+    setKeywordsOptions(results);
+  };
+
+  const debouncedFetchKeywordsOptions = useMemo(
+    () => debounce(fetchKeywordsOptions, 1000),
     [],
   );
 
@@ -84,7 +85,9 @@ export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
                 getOptionLabel={(option) => option.name}
                 onChange={(_, value) => onChange(value)}
                 value={value}
-                onInputChange={(_, value) => fetchKeywords(value)}
+                onInputChange={(_, value) =>
+                  debouncedFetchKeywordsOptions(value)
+                }
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 renderInput={(params) => (
                   <TextField

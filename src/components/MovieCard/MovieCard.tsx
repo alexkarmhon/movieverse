@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -19,12 +19,15 @@ import { Movie } from '../../reducers/movies';
 export interface MovieCardProps {
   movie: Movie;
   enableUserActions?: boolean;
+  onAddFavorite?(id: number): void;
 }
 
-export const MovieCard: React.FC<MovieCardProps> = ({
+const MovieCard: React.FC<MovieCardProps> = ({
   movie,
   enableUserActions,
+  onAddFavorite,
 }) => {
+  console.count('MovieCard');
   return (
     <Card
       sx={{
@@ -98,7 +101,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
       >
         <Button
           component={RouterLink}
-          to={`${movie.id}`}
+          to={`/movies/${movie.id}`}
           color="secondary"
           sx={{
             textTransform: 'none',
@@ -113,7 +116,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         </Button>
         {enableUserActions && (
           <Tooltip title="Add to favorites">
-            <IconButton>
+            <IconButton onClick={() => onAddFavorite?.(movie.id)}>
               <FavoriteIcon
                 sx={{
                   '&:hover': {
@@ -128,3 +131,5 @@ export const MovieCard: React.FC<MovieCardProps> = ({
     </Card>
   );
 };
+
+export default memo(MovieCard);
