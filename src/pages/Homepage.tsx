@@ -7,7 +7,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { anonymousUser, AuthContext } from '../AuthContext';
 // import Movies from '../components/Movies/Movies';
 // import { fetchUpcoming, Movie } from '../reducers/movies';
-import { RootState } from '../store';
+import { RootState } from '../redux/store';
 
 // interface HomepageProps {
 //   movies: Movie[];

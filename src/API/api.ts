@@ -1,3 +1,5 @@
+import { Genre } from '../redux/movies';
+
 const API_ACCESS_TOKEN = import.meta.env.VITE_API_ACCESS_TOKEN;
 
 export const getOptions: RequestInit = {
@@ -48,6 +50,10 @@ interface KeywordsResponse {
   page: number;
   total_pages: number;
   total_results: number;
+}
+
+interface GenresResponse {
+  genres: Genre[];
 }
 
 export interface MoviesFilters {
@@ -122,6 +128,21 @@ export const getUpcoming = async (): Promise<UpcomingResponse> => {
 export const getKeywords = async (query: string): Promise<KeywordsResponse> => {
   const response = await fetch(
     `https://api.themoviedb.org/3/search/keyword?query=${query}&page=1`,
+    getOptions,
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch now playing movies: ${response.statusText}`,
+    );
+  }
+
+  return response.json();
+};
+
+export const getGenres = async (): Promise<GenresResponse> => {
+  const response = await fetch(
+    `https://api.themoviedb.org/3/genre/movie/list?language=en`,
     getOptions,
   );
 

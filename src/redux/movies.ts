@@ -1,12 +1,11 @@
 import {
+  getGenres,
   getMovies,
   getNowPlaying,
   getUpcoming,
   MoviesFilters,
 } from '../API/api';
-import { genres } from '../genres';
-import { ActionWithPayload, createReducer } from '../redux/utils';
-import { AppThunk } from '../store';
+import { AppThunk } from './store';
 
 export interface Movie {
   backdrop_path: string;
@@ -33,22 +32,6 @@ export interface MoviesState {
   loading: boolean;
 }
 
-interface MoviesTopPayload {
-  movies: Movie[];
-  page: number;
-  hasMorePages: boolean;
-}
-
-const initialState: MoviesState = {
-  top: [],
-  topPage: 0,
-  hasMoreTopPages: true,
-  upcoming: [],
-  upcomingPage: 0,
-  loading: false,
-  genres,
-};
-
 const moviesTopLoaded = (
   movies: Movie[],
   page: number,
@@ -70,6 +53,11 @@ const moviesLoaded = (
 const moviesUpcomingLoaded = (movies: Movie[]) => ({
   type: 'moviesUpcoming/loaded',
   payload: movies,
+});
+
+const genresLoaded = (genres: Genre[]) => ({
+  type: 'movies/genres',
+  payload: genres,
 });
 
 const moviesLoading = () => ({
@@ -112,41 +100,10 @@ export const fetchUpcoming = (): AppThunk<Promise<void>> => {
   };
 };
 
-const moviesReducer = createReducer<MoviesState>(initialState, {
-  'movies/loaded': (state, action: ActionWithPayload<MoviesTopPayload>) => {
-    return {
-      ...state,
-      top: [...state.top, ...action.payload.movies],
-      topPage: action.payload.page,
-      hasMoreTopPages: action.payload.hasMorePages,
-      loading: false,
-    };
-  },
-  'moviesTop/loaded': (state, action: ActionWithPayload<MoviesTopPayload>) => {
-    return {
-      ...state,
-      top: [...state.top, ...action.payload.movies],
-      topPage: action.payload.page,
-      hasMoreTopPages: action.payload.hasMorePages,
-      loading: false,
-    };
-  },
-  'moviesUpcoming/loaded': (state, action: ActionWithPayload<Movie[]>) => {
-    return {
-      ...state,
-      upcoming: action.payload,
-      loading: false,
-    };
-  },
-  'movies/loading': (state) => {
-    return {
-      ...state,
-      loading: true,
-    };
-  },
-  'movies/reset': () => {
-    return { ...initialState };
-  },
-});
-
-export default moviesReducer;
+export const fetchGenres = (): AppThunk<Promise<void>> => {
+  return async (dispatch) => {
+    dispatch(moviesLoading());
+    const { genres } = await getGenres();
+    dispatch(genresLoaded(genres));
+  };
+};

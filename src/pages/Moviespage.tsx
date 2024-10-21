@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Container } from '@mui/material';
 
 import Movies from '../components/Movies/Movies';
-import { Movie } from '../reducers/movies';
-import { RootState } from '../store';
+import { Movie } from '../redux/movies';
+import { RootState } from '../redux/store';
 
 interface MoviesPageProps {
   movies: Movie[];

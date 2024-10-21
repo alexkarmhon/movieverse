@@ -6,7 +6,7 @@ import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 import { anonymousUser, AuthContext } from '../../AuthContext';
 import { useAppDispatch } from '../../hooks';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import { fetchNextPage, Movie, resetMovies } from '../../reducers/movies';
+import { fetchNextPage, Movie, resetMovies } from '../../redux/movies';
 import { selectHasMorePages } from '../../redux/selectors';
 import MovieCard from '../MovieCard/MovieCard';
 import { Filters, MoviesFilter } from '../MoviesFilter/MoviesFilter';

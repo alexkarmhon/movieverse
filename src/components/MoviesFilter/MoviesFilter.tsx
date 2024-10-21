@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 
 import { getKeywords, KeywordItem } from '../../API/api';
+import { useAppDispatch } from '../../hooks';
+import { fetchGenres } from '../../redux/movies';
 import { selectGenres } from '../../redux/selectors';
 
 interface MoviesFilterProps {
@@ -29,6 +31,7 @@ export interface Filters {
 }
 
 export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
+  const dispatch = useAppDispatch();
   const genres = useSelector(selectGenres);
 
   const [keywordsLoading, setKeywordsLoading] = useState(false);
@@ -40,6 +43,10 @@ export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
       genres: [],
     },
   });
+
+  useEffect(() => {
+    dispatch(fetchGenres());
+  }, [dispatch]);
 
   const fetchKeywordsOptions = async (query: string) => {
     if (!query) {

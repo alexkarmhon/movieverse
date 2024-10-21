@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Movie } from '../../reducers/movies';
+import { Movie } from '../../redux/movies';
 
 export interface MovieCardProps {
   movie: Movie;
@@ -27,7 +27,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
   enableUserActions,
   onAddFavorite,
 }) => {
-  console.count('MovieCard');
   return (
     <Card
       sx={{
