@@ -14,10 +14,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Movie } from '../../redux/moviesAPI';
+import { MovieDetails } from '../../redux/moviesAPI';
 
 export interface MovieCardProps {
-  movie: Movie;
+  movie: MovieDetails;
   enableUserActions?: boolean;
   onAddFavorite?(id: number): void;
 }
