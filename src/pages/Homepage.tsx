@@ -5,16 +5,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Container, Typography } from '@mui/material';
 
 import { anonymousUser, AuthContext } from '../AuthContext';
-// import Movies from '../components/Movies/Movies';
-// import { fetchUpcoming, Movie } from '../reducers/movies';
 import { RootState } from '../redux/store';
 
-// interface HomepageProps {
-//   movies: Movie[];
-//   loading: boolean;
-// }
-
-// function Homepage({ movies, loading }: HomepageProps) {
 function Homepage() {
   const { user } = useContext(AuthContext);
   const isLoggedIn = user !== anonymousUser;
@@ -33,8 +25,6 @@ function Homepage() {
           color: 'white',
           textAlign: 'center',
           py: 15,
-          // mb: 4,
-          // borderRadius: 3,
           boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
         }}
       >
@@ -61,21 +51,12 @@ function Homepage() {
           </Button>
         )}
       </Box>
-
-      {/* Latest Movies Section */}
-      {/* <Movies
-        movies={movies}
-        loading={loading}
-        moviesTitle={'Latest Releases'}
-        fetchCallback={fetchUpcoming}
-      /> */}
     </Container>
   );
 }
 
 const mapStateToProps = (state: RootState) => ({
-  movies: state.movies.upcoming,
-  loading: state.movies.loading,
+  movies: state.movies,
 });
 
 const connector = connect(mapStateToProps);

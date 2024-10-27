@@ -7,11 +7,6 @@ interface PageResponse<TResult> {
   results: TResult[];
   total_pages: number;
 }
-// interface PageDetails<TResult> {
-//   page: number;
-//   results: TResult[];
-//   total_pages: number;
-// }
 
 export interface MovieDetails {
   id: number;
@@ -29,13 +24,6 @@ interface MoviesState {
   hasMorePages: boolean;
 }
 
-// interface MoviesResponse {
-//   results: MovieDetails[];
-//   page: number;
-//   total_pages: number;
-//   total_results: number;
-// }
-
 export interface MoviesFilters {
   keywords?: number[];
   genres?: number[];
@@ -50,13 +38,6 @@ export interface KeywordItem {
   id: number;
   name: string;
 }
-
-// interface KeywordsResponse {
-//   results: KeywordItem[];
-//   page: number;
-//   total_pages: number;
-//   total_results: number;
-// }
 
 export interface Genre {
   id: number;
