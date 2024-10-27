@@ -1,21 +1,26 @@
-import { composeWithDevTools } from '@redux-devtools/extension';
-import { applyMiddleware, createStore, UnknownAction } from 'redux';
-import { thunk, ThunkAction } from 'redux-thunk';
+import { useDispatch } from 'react-redux';
 
-import rootReducer from './reducer';
+import { configureStore, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
-const composedEnhancer = composeWithDevTools(applyMiddleware(thunk));
-const store = createStore(rootReducer, composedEnhancer);
+import { moviesApi } from './moviesAPI';
+
+export const store = configureStore({
+  reducer: {
+    [moviesApi.reducerPath]: moviesApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(moviesApi.middleware),
+});
+
+setupListeners(store.dispatch);
 
 export type AppDispatch = typeof store.dispatch;
-
 export type AppThunk<ReturnType> = ThunkAction<
   ReturnType,
   RootState,
   undefined,
   UnknownAction
 >;
-
 export type RootState = ReturnType<typeof store.getState>;
-
-export default store;
+export const useAppDispatch = useDispatch<AppDispatch>;

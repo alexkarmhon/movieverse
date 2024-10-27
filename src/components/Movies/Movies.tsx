@@ -1,51 +1,41 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
 import { anonymousUser, AuthContext } from '../../AuthContext';
-import { useAppDispatch } from '../../hooks';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import { fetchNextPage, Movie, resetMovies } from '../../redux/movies';
-import { selectHasMorePages } from '../../redux/selectors';
+import {
+  MoviesFilters,
+  MoviesQuery,
+  useGetMoviesQuery,
+} from '../../redux/moviesAPI';
 import MovieCard from '../MovieCard/MovieCard';
-import { Filters, MoviesFilter } from '../MoviesFilter/MoviesFilter';
+import { MoviesFilter } from '../MoviesFilter/MoviesFilter';
 
 export interface MoviesProps {
-  movies: Movie[];
-  loading: boolean;
   moviesTitle?: string;
 }
 
-export const Movies: React.FC<MoviesProps> = ({
-  movies,
-  loading,
-  moviesTitle,
-}) => {
-  const dispatch = useAppDispatch();
-  const hasMorePages = useSelector(selectHasMorePages);
-  const [filters, setFilters] = useState<Filters>();
+const initialQuery: MoviesQuery = { page: 1, filters: {} };
+
+export const Movies: React.FC<MoviesProps> = ({ moviesTitle }) => {
+  const [query, setQuery] = useState<MoviesQuery>(initialQuery);
+
+  const { data, isFetching } = useGetMoviesQuery(query);
+
+  const movies = data?.results;
+  const hasMorePages = data?.hasMorePages;
+
   const { user } = useContext(AuthContext);
   const isLoggedIn = user !== anonymousUser;
 
-  const [targetRef, entry] = useIntersectionObserver();
-
-  useEffect(() => {
-    dispatch(resetMovies());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (entry?.isIntersecting && hasMorePages) {
-      const moviesFilters = filters
-        ? {
-            keywords: filters.keywords.map((k) => k.id),
-            genres: filters.genres,
-          }
-        : undefined;
-
-      dispatch(fetchNextPage(moviesFilters));
+  const onIntersect = useCallback(() => {
+    if (hasMorePages) {
+      setQuery((q) => ({ ...q, page: q.page + 1 }));
     }
-  }, [dispatch, entry?.isIntersecting, filters, hasMorePages]);
+  }, [hasMorePages]);
+
+  const [targetRef] = useIntersectionObserver({ onIntersect });
 
   const handleAddFavorite = useCallback(
     (id: number) => {
@@ -56,13 +46,25 @@ export const Movies: React.FC<MoviesProps> = ({
     [user.name],
   );
 
+  useEffect(() => {
+    console.log('Current page:', query.page);
+    console.log('Current movies:', movies);
+  }, [query.page, movies]);
+
   return (
     <Grid container spacing={2} sx={{ flexWrap: 'nowrap' }}>
       <Grid item xs={5.5}>
         <MoviesFilter
-          onApply={(f) => {
-            dispatch(resetMovies());
-            setFilters(f);
+          onApply={(filters) => {
+            const moviesFilters: MoviesFilters = {
+              keywords: filters.keywords.map((keyword) => keyword.id),
+              genres: filters.genres,
+            };
+
+            setQuery({
+              page: 1,
+              filters: moviesFilters,
+            });
           }}
         />
       </Grid>
@@ -77,7 +79,7 @@ export const Movies: React.FC<MoviesProps> = ({
             {moviesTitle}
           </Typography>
           <Grid container spacing={4}>
-            {movies.map((movie, i) => (
+            {movies?.map((movie, i) => (
               <Grid item key={`${movie.id}-${i}`} xs={12} sm={6} md={4}>
                 <MovieCard
                   movie={movie}
@@ -89,7 +91,7 @@ export const Movies: React.FC<MoviesProps> = ({
             ))}
           </Grid>
           <div ref={targetRef}>
-            {loading && <LinearProgress color="secondary" sx={{ mt: 3 }} />}
+            {isFetching && <LinearProgress color="secondary" sx={{ mt: 3 }} />}
           </div>
         </Container>
       </Grid>

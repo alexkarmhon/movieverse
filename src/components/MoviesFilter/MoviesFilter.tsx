@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import {
@@ -13,29 +12,30 @@ import {
   FormGroup,
   FormLabel,
   Paper,
+  Skeleton,
   TextField,
 } from '@mui/material';
 
-import { getKeywords, KeywordItem } from '../../API/api';
-import { useAppDispatch } from '../../hooks';
-import { fetchGenres } from '../../redux/movies';
-import { selectGenres } from '../../redux/selectors';
-
-interface MoviesFilterProps {
-  onApply: (filters: Filters) => void;
-}
+import {
+  KeywordItem,
+  useGetGenresQuery,
+  useGetKeywordsQuery,
+} from '../../redux/moviesAPI';
 
 export interface Filters {
   keywords: KeywordItem[];
   genres: number[];
 }
 
-export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
-  const dispatch = useAppDispatch();
-  const genres = useSelector(selectGenres);
+interface MoviesFilterProps {
+  onApply: (filters: Filters) => void;
+}
 
-  const [keywordsLoading, setKeywordsLoading] = useState(false);
-  const [keywordsOptions, setKeywordsOptions] = useState<KeywordItem[]>([]);
+export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
+  const [keywordsQuery, setKeywordsQuery] = useState<string>('');
+  const { data: genres = [], isLoading: genresLoading } = useGetGenresQuery();
+  const { data: keywordsOptions = [], isLoading: keywordsLoading } =
+    useGetKeywordsQuery(keywordsQuery, { skip: !keywordsQuery });
 
   const { handleSubmit, control } = useForm<Filters>({
     defaultValues: {
@@ -44,24 +44,11 @@ export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
     },
   });
 
-  useEffect(() => {
-    dispatch(fetchGenres());
-  }, [dispatch]);
-
-  const fetchKeywordsOptions = async (query: string) => {
-    if (!query) {
-      setKeywordsOptions([]);
-    }
-
-    setKeywordsLoading(true);
-
-    const { results } = await getKeywords(query);
-    setKeywordsLoading(false);
-    setKeywordsOptions(results);
-  };
-
   const debouncedFetchKeywordsOptions = useMemo(
-    () => debounce(fetchKeywordsOptions, 1000),
+    () =>
+      debounce((query: string) => {
+        setKeywordsQuery(query);
+      }, 1000),
     [],
   );
 
@@ -112,41 +99,47 @@ export const MoviesFilter: React.FC<MoviesFilterProps> = ({ onApply }) => {
           component="fieldset"
           variant="standard"
         >
-          <FormLabel component={'legend'}>Genres</FormLabel>
-          <FormGroup sx={{ maxHeight: 500 }}>
-            <Controller
-              name="genres"
-              control={control}
-              render={({ field }) => (
-                <>
-                  {genres.map((genre) => (
-                    <FormControlLabel
-                      key={genre.id}
-                      control={
-                        <Checkbox
-                          value={genre.id}
-                          checked={field.value.includes(genre.id)}
-                          onChange={(event, checked) => {
-                            const valueNumber = Number(event.target.value);
-                            if (checked) {
-                              field.onChange([...field.value, valueNumber]);
-                            } else {
-                              field.onChange(
-                                field.value.filter(
-                                  (value) => value !== valueNumber,
-                                ),
-                              );
-                            }
-                          }}
+          {genresLoading ? (
+            <Skeleton width={300} height={480} />
+          ) : (
+            <>
+              <FormLabel component={'legend'}>Genres</FormLabel>
+              <FormGroup sx={{ maxHeight: 500 }}>
+                <Controller
+                  name="genres"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      {genres.map((genre) => (
+                        <FormControlLabel
+                          key={genre.id}
+                          control={
+                            <Checkbox
+                              value={genre.id}
+                              checked={field.value.includes(genre.id)}
+                              onChange={(event, checked) => {
+                                const valueNumber = Number(event.target.value);
+                                if (checked) {
+                                  field.onChange([...field.value, valueNumber]);
+                                } else {
+                                  field.onChange(
+                                    field.value.filter(
+                                      (value) => value !== valueNumber,
+                                    ),
+                                  );
+                                }
+                              }}
+                            />
+                          }
+                          label={genre.name}
                         />
-                      }
-                      label={genre.name}
-                    />
-                  ))}
-                </>
-              )}
-            />
-          </FormGroup>
+                      ))}
+                    </>
+                  )}
+                />
+              </FormGroup>
+            </>
+          )}
         </FormControl>
         <Button
           type="submit"
