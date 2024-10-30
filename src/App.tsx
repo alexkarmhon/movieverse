@@ -3,13 +3,10 @@ import { Route, Routes } from 'react-router-dom';
 
 import { Layout } from './components/Layout/Layout';
 
-// import About from './pages/About';
-// import Homepage from './pages/Homepage';
-// import Moviespage from './pages/Moviespage';
-
 const About = lazy(() => import('./pages/About'));
 const Homepage = lazy(() => import('./pages/Homepage.tsx'));
 const Moviespage = lazy(() => import('./pages/Moviespage.tsx'));
+const Extrapage = lazy(() => import('./pages/Extrapage.tsx'));
 
 function App() {
   return (
@@ -19,6 +16,7 @@ function App() {
           <Route index element={<Homepage />} />
           <Route path="/about" element={<About />} />
           <Route path="/movies" element={<Moviespage />} />
+          <Route path="/extra" element={<Extrapage />} />
         </Route>
       </Routes>
     </Suspense>

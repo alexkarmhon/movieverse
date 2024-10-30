@@ -74,13 +74,12 @@ export const Header: FC<HeaderProps> = ({ onLogout, onLogin }) => {
           MovieverseTMDB
         </Typography>
         <Box flexGrow={1}>
-          {isLoggedIn && (
-            <nav>
-              <HeaderLink to="/">Home</HeaderLink>
-              <HeaderLink to="/movies">Movies</HeaderLink>
-              <HeaderLink to="/about">About</HeaderLink>
-            </nav>
-          )}
+          <nav>
+            <HeaderLink to="/">Home</HeaderLink>
+            <HeaderLink to="/movies">Movies</HeaderLink>
+            <HeaderLink to="/about">About</HeaderLink>
+            {isLoggedIn && <HeaderLink to="/extra">Extra</HeaderLink>}
+          </nav>
         </Box>
         <AuthSection
           condition={isLoggedIn}
