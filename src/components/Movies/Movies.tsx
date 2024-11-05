@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Container, Grid, LinearProgress, Typography } from '@mui/material';
 
-import { anonymousUser, AuthContext } from '../../AuthContext';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import {
   MoviesFilters,
@@ -26,8 +26,7 @@ export const Movies: React.FC<MoviesProps> = ({ moviesTitle }) => {
   const movies = data?.results;
   const hasMorePages = data?.hasMorePages;
 
-  const { user } = useContext(AuthContext);
-  const isLoggedIn = user !== anonymousUser;
+  const { isAuthenticated, user } = useAuth0();
 
   const onIntersect = useCallback(() => {
     if (hasMorePages) {
@@ -40,10 +39,10 @@ export const Movies: React.FC<MoviesProps> = ({ moviesTitle }) => {
   const handleAddFavorite = useCallback(
     (id: number) => {
       alert(
-        `Not implemented! Action: ${user.name} is adding movie ${id} to favorites`,
+        `Not implemented! Action: ${user?.name} is adding movie ${id} to favorites`,
       );
     },
-    [user.name],
+    [user?.name],
   );
 
   useEffect(() => {
@@ -84,7 +83,7 @@ export const Movies: React.FC<MoviesProps> = ({ moviesTitle }) => {
                 <MovieCard
                   movie={movie}
                   key={movie.id}
-                  enableUserActions={isLoggedIn}
+                  enableUserActions={isAuthenticated}
                   onAddFavorite={handleAddFavorite}
                 />
               </Grid>

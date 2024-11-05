@@ -1,18 +1,16 @@
-import { useContext } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Box, Button, Container, Typography } from '@mui/material';
 
-import { anonymousUser, AuthContext } from '../AuthContext';
 import { RootState } from '../redux/store';
 
-function Homepage() {
-  const { user } = useContext(AuthContext);
-  const isLoggedIn = user !== anonymousUser;
+function HomePage() {
+  const { isAuthenticated, user } = useAuth0();
 
-  const greeting = isLoggedIn
-    ? ` Hello, ${user.name}!  Discover, explore, and enjoy the latest movies!`
+  const greeting = isAuthenticated
+    ? ` Hello, ${user?.name}!  Discover, explore, and enjoy the latest movies!`
     : ' Discover, explore, and enjoy the latest movies!';
   return (
     <Container sx={{ py: 6 }} disableGutters>
@@ -34,7 +32,7 @@ function Homepage() {
         <Typography variant="h6" gutterBottom>
           {greeting}
         </Typography>
-        {isLoggedIn && (
+        {isAuthenticated && (
           <Button
             component={RouterLink}
             to="/movies"
@@ -60,4 +58,4 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const connector = connect(mapStateToProps);
-export default connector(Homepage);
+export default connector(HomePage);

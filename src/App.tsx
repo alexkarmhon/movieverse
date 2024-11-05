@@ -1,22 +1,24 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import AuthCallback from './auth/AuthCallback.tsx';
 import { Layout } from './components/Layout/Layout';
 
 const About = lazy(() => import('./pages/About'));
-const Homepage = lazy(() => import('./pages/Homepage.tsx'));
-const Moviespage = lazy(() => import('./pages/Moviespage.tsx'));
-const Extrapage = lazy(() => import('./pages/Extrapage.tsx'));
+const HomePage = lazy(() => import('./pages/HomePage.tsx'));
+const MoviesPage = lazy(() => import('./pages/MoviesPage.tsx'));
+const ExtraPage = lazy(() => import('./pages/ExtraPage.tsx'));
 
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Homepage />} />
+          <Route index element={<HomePage />} />
           <Route path="/about" element={<About />} />
-          <Route path="/movies" element={<Moviespage />} />
-          <Route path="/extra" element={<Extrapage />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          <Route path="/extra" element={<ExtraPage />} />
+          <Route path="/callback" element={<AuthCallback />} />
         </Route>
       </Routes>
     </Suspense>

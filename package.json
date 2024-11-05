@@ -12,6 +12,7 @@
     "prettier:write": "prettier --write . --ext .js,.jsx,.ts,.tsx,.css,.scss,.html,.json,.md --ignore-unknown"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",

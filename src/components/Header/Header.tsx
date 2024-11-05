@@ -1,26 +1,15 @@
-import { FC, useContext } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import LiveTvOutlined from '@mui/icons-material/LiveTvOutlined';
 import { AppBar, Box, Button, Link, Toolbar, Typography } from '@mui/material';
 
-import { anonymousUser, AuthContext } from '../../AuthContext';
 import styles from './Header.module.scss';
-
-interface HeaderProps {
-  onLogout: () => void;
-  onLogin: () => void;
-}
 
 interface HeaderLinkProps {
   children: React.ReactNode;
   to: string;
-}
-
-interface AuthSectionProps {
-  condition: boolean;
-  onLogout: () => void;
-  onLogin: () => void;
 }
 
 const HeaderLink: FC<HeaderLinkProps> = ({ children, to }) => {
@@ -38,12 +27,23 @@ const HeaderLink: FC<HeaderLinkProps> = ({ children, to }) => {
   );
 };
 
-const AuthSection: FC<AuthSectionProps> = ({
-  condition,
-  onLogout,
-  onLogin,
-}) => {
-  if (condition) {
+const AuthSection: FC = () => {
+  const { loginWithRedirect, isAuthenticated, logout } = useAuth0();
+
+  const onLogin = async () => {
+    await loginWithRedirect({
+      appState: { returnTo: '/' },
+    });
+  };
+  const onLogout = () => {
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  };
+
+  if (isAuthenticated) {
     return (
       <Button color="inherit" variant="outlined" onClick={onLogout}>
         Log out
@@ -57,10 +57,8 @@ const AuthSection: FC<AuthSectionProps> = ({
   );
 };
 
-export const Header: FC<HeaderProps> = ({ onLogout, onLogin }) => {
-  const { user } = useContext(AuthContext);
-  const isLoggedIn = user !== anonymousUser;
-
+export const Header: FC = () => {
+  const { isAuthenticated } = useAuth0();
   return (
     <AppBar position="fixed" sx={{ backgroundColor: '#22435e' }}>
       <Toolbar>
@@ -78,14 +76,10 @@ export const Header: FC<HeaderProps> = ({ onLogout, onLogin }) => {
             <HeaderLink to="/">Home</HeaderLink>
             <HeaderLink to="/movies">Movies</HeaderLink>
             <HeaderLink to="/about">About</HeaderLink>
-            {isLoggedIn && <HeaderLink to="/extra">Extra</HeaderLink>}
+            {isAuthenticated && <HeaderLink to="/extra">Extra</HeaderLink>}
           </nav>
         </Box>
-        <AuthSection
-          condition={isLoggedIn}
-          onLogout={onLogout}
-          onLogin={onLogin}
-        />
+        <AuthSection />
       </Toolbar>
     </AppBar>
   );
