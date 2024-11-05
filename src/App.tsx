@@ -5,9 +5,9 @@ import AuthCallback from './auth/AuthCallback.tsx';
 import { Layout } from './components/Layout/Layout';
 
 const About = lazy(() => import('./pages/About'));
-const HomePage = lazy(() => import('./pages/HomePage.tsx'));
-const MoviesPage = lazy(() => import('./pages/MoviesPage.tsx'));
-const ExtraPage = lazy(() => import('./pages/ExtraPage.tsx'));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const MoviesPage = lazy(() => import('./pages/MoviesPage'));
+const ExtraPage = lazy(() => import('./pages/ExtraPage'));
 
 function App() {
   return (
