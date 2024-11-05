@@ -5,7 +5,7 @@ import { Container } from '@mui/material';
 import Movies from '../components/Movies/Movies';
 import { RootState } from '../redux/store';
 
-function MoviesPage() {
+function Moviespage() {
   return (
     <Container sx={{ py: 6 }}>
       <Movies />
@@ -17,4 +17,4 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const connector = connect(mapStateToProps);
-export default connector(MoviesPage);
+export default connector(Moviespage);
