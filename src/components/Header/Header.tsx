@@ -3,59 +3,10 @@ import { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import LiveTvOutlined from '@mui/icons-material/LiveTvOutlined';
-import { AppBar, Box, Button, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 
-import styles from './Header.module.scss';
-
-interface HeaderLinkProps {
-  children: React.ReactNode;
-  to: string;
-}
-
-const HeaderLink: FC<HeaderLinkProps> = ({ children, to }) => {
-  return (
-    <Link
-      component={RouterLink}
-      to={to}
-      className={styles.link}
-      variant="button"
-      color="inherit"
-      sx={{ my: 1, mx: 1.5 }}
-    >
-      {children}
-    </Link>
-  );
-};
-
-const AuthSection: FC = () => {
-  const { loginWithRedirect, isAuthenticated, logout } = useAuth0();
-
-  const onLogin = async () => {
-    await loginWithRedirect({
-      appState: { returnTo: '/' },
-    });
-  };
-  const onLogout = () => {
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin,
-      },
-    });
-  };
-
-  if (isAuthenticated) {
-    return (
-      <Button color="inherit" variant="outlined" onClick={onLogout}>
-        Log out
-      </Button>
-    );
-  }
-  return (
-    <Button color="inherit" variant="outlined" onClick={onLogin}>
-      Log in
-    </Button>
-  );
-};
+import { AuthSection } from './AuthSection';
+import { HeaderLink } from './HeaderLink';
 
 export const Header: FC = () => {
   const { isAuthenticated } = useAuth0();
