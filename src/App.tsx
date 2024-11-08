@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import AuthCallback from './auth/AuthCallback.tsx';
+import { AuthGuard } from './auth/AuthGuard.tsx';
 import { Layout } from './components/Layout/Layout';
 
 // import Profile from './components/Profile/Profile.tsx';
@@ -22,7 +23,7 @@ function App() {
           <Route path="/movies" element={<MoviesPage />} />
           <Route path="/extra" element={<ExtraPage />} />
           <Route path="/callback" element={<AuthCallback />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<AuthGuard component={Profile} />} />
         </Route>
       </Routes>
     </Suspense>
