@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { MovieDetails } from '../../redux/moviesAPI';
+import { MovieDetails } from '../../services/moviesAPI';
 
 export interface MovieCardProps {
   movie: MovieDetails;

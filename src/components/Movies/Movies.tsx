@@ -8,7 +8,7 @@ import {
   MoviesFilters,
   MoviesQuery,
   useGetMoviesQuery,
-} from '../../redux/moviesAPI';
+} from '../../services/moviesAPI';
 import MovieCard from '../MovieCard/MovieCard';
 import { MoviesFilter } from '../MoviesFilter/MoviesFilter';
 

@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 
 import { Container, Grid, LinearProgress } from '@mui/material';
 
-import { EpisodesQuery, useGetEpisodesQuery } from '../../redux/rickandmorty';
+import {
+  EpisodesQuery,
+  useGetEpisodesQuery,
+} from '../../services/rickandmorty';
 import ExtraCard from './ExtraCard';
 import Pager from './Pager';
 

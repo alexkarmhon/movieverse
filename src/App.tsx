@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import { LinearProgress } from '@mui/material';
+
 import AuthCallback from './auth/AuthCallback.tsx';
 import { AuthGuard } from './auth/AuthGuard.tsx';
 import { Layout } from './components/Layout/Layout';
@@ -12,10 +14,11 @@ const HomePage = lazy(() => import('./pages/Home'));
 const MoviesPage = lazy(() => import('./pages/Moviespage'));
 const ExtraPage = lazy(() => import('./pages/Extra'));
 const Profile = lazy(() => import('./components/Profile/Profile.tsx'));
+const Protected = lazy(() => import('./components/Protected/Protected.tsx'));
 
 function App() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LinearProgress />}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
@@ -24,6 +27,10 @@ function App() {
           <Route path="/extra" element={<ExtraPage />} />
           <Route path="/callback" element={<AuthCallback />} />
           <Route path="/profile" element={<AuthGuard component={Profile} />} />
+          <Route
+            path="/protected"
+            element={<AuthGuard component={Protected} />}
+          />
         </Route>
       </Routes>
     </Suspense>

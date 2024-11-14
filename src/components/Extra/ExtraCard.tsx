@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Character } from '../../redux/rickandmorty';
+import { Character } from '../../services/rickandmorty';
 
 export interface ExtraCardProps {
   name: string;

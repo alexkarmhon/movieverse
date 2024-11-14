@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { configureStore, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import { moviesApi } from './moviesAPI';
-import { rickandmortyAPI } from './rickandmorty';
+import { moviesApi } from '../services/moviesAPI';
+import { rickandmortyAPI } from '../services/rickandmorty';
 
 export const store = configureStore({
   reducer: {

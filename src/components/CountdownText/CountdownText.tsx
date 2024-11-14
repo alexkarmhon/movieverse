@@ -50,7 +50,7 @@ export const CountdownVideo: FC = () => {
 
 export const CountdownText: FC = () => {
   const [countdown, setCountdown] = useState(9);
-  const intervalRef = useRef<number>();
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {

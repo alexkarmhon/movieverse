@@ -20,7 +20,7 @@ import {
   KeywordItem,
   useGetGenresQuery,
   useGetKeywordsQuery,
-} from '../../redux/moviesAPI';
+} from '../../services/moviesAPI';
 
 export interface Filters {
   keywords: KeywordItem[];

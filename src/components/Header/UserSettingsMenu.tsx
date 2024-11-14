@@ -14,12 +14,14 @@ import {
 interface UserSettingsMenuProps {
   user: User | undefined;
   onLogout: () => void;
+  onProtected: () => void;
   onOpenProfile: () => void;
 }
 
 export const UserSettingsMenu: FC<UserSettingsMenuProps> = ({
   user,
   onLogout,
+  onProtected,
   onOpenProfile,
 }) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -58,6 +60,14 @@ export const UserSettingsMenu: FC<UserSettingsMenuProps> = ({
           }}
         >
           <Typography textAlign={'center'}>Profile</Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleCloseUserMenu();
+            onProtected();
+          }}
+        >
+          <Typography textAlign={'center'}>Protected</Typography>
         </MenuItem>
         <MenuItem
           onClick={() => {

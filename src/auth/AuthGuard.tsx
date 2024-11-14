@@ -13,5 +13,3 @@ export function AuthGuard({ component }: AuthGuardProps) {
   });
   return <Component />;
 }
-
-// export default AuthGuard;

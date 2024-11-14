@@ -32,6 +32,7 @@ export const AuthSection: FC = () => {
       <UserSettingsMenu
         user={user}
         onLogout={onLogout}
+        onProtected={() => navigate('/protected')}
         onOpenProfile={() => navigate('/profile')}
       />
     );
