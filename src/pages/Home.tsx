@@ -6,7 +6,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 
 import { RootState } from '../redux/store';
 
-function HomePage() {
+export function HomePage() {
   const { isAuthenticated, user } = useAuth0();
 
   const greeting = isAuthenticated
